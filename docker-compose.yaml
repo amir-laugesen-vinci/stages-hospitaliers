@@ -1,0 +1,25 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./backend/prisma:/app/prisma
+    environment:
+      - DATABASE_URL=file:./dev.db
+    container_name: stages-backend
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_URL: http://localhost:4000/api
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    container_name: stages-frontend
+
+volumes:
+  backend_data:

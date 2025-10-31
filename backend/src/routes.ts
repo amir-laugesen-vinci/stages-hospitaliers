@@ -1,27 +1,41 @@
 import { Router } from 'express';
-import { prisma } from './prisma';
-import { RequestCreateSchema, StatusSchema } from './validators';
+import { prisma } from './prisma.js';
+import type { Prisma } from '@prisma/client';
+import { RequestCreateSchema, StatusSchema } from './validators.js';
 
 const router = Router();
 
 router.get('/requests', async (req, res) => {
   const { statut, service } = req.query as { statut?: string; service?: string };
+
+  const where: Prisma.RequestWhereInput = {
+    ...(statut ? { statut: statut as any } : {}),
+    ...(service ? { service: { contains: String(service) } } : {}),
+  };
+
   const items = await prisma.request.findMany({
-    where: {
-      ...(statut ? { statut } : {}),
-      ...(service ? { service: { contains: service, mode: 'insensitive' } } : {})
-    },
+    where,
     orderBy: { createdAt: 'desc' }
   });
+
   res.json(items);
 });
 
 router.post('/requests', async (req, res) => {
   const parse = RequestCreateSchema.safeParse(req.body);
   if (!parse.success) return res.status(400).json({ error: parse.error.flatten() });
-  const created = await prisma.request.create({ data: parse.data });
+
+  const { motivation, ...rest } = parse.data;
+  const created = await prisma.request.create({
+    data: {
+      ...rest,
+      // Prisma veut string | null
+      motivation: motivation ?? null,
+    },
+  });
   res.status(201).json(created);
 });
+
 
 router.get('/requests/:id', async (req, res) => {
   const id = Number(req.params.id);

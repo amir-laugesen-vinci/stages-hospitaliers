@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
-import router from "./routes";
-import { openapiSpec } from "./openapi";
+import router from "./routes.js";
+import { openapiSpec } from "./openapi.js";
 import swaggerUi from "swagger-ui-express";
 
 const app = express();
