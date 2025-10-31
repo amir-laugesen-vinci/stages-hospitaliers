@@ -1,0 +1,27 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum Statut {
+  EN_ATTENTE
+  APPROUVEE
+  REFUSEE
+}
+
+model Request {
+  id         Int      @id @default(autoincrement())
+  nom        String
+  prenom     String
+  email      String
+  service    String
+  dateDebut  DateTime
+  dateFin    DateTime
+  statut     Statut   @default(EN_ATTENTE)
+  motivation String?
+  createdAt  DateTime @default(now())
+}
