@@ -1,4 +1,4 @@
-export type Statut = 'EN_ATTENTE' | 'APPROUVEE' | 'REFUSEE';
+export type Statut = "EN_ATTENTE" | "APPROUVEE" | "REFUSEE";
 
 export interface RequestItem {
   id: number;
@@ -6,9 +6,9 @@ export interface RequestItem {
   prenom: string;
   email: string;
   service: string;
-  dateDebut: string; // ISO
-  dateFin: string;   // ISO
+  dateDebut: string;
+  dateFin: string;
   statut: Statut;
   motivation?: string | null;
-  createdAt: string; // ISO
+  createdAt: string;
 }
