@@ -90,6 +90,9 @@ Docker : un seul docker compose up suffit à tout lancer.
 
 Les données sont stockées dans backend/prisma/dev.db (volume Docker backend_data).
 
+⚠️ Problemes
+
+Version de React (V19) trop récente pour Antd (preferer v18 si besoin), revenir à react 18 ou alors adapter ce qui ne marche pas. (voir message de succès lors de creation d'un stage)
 
 📄 Auteur
 

@@ -9,7 +9,7 @@ import {
   Modal,
   Form,
   Input,
-  message,
+  //message,
   Descriptions,
 } from "antd";
 import { useCallback, useEffect, useState } from "react";
@@ -27,6 +27,22 @@ export default function App() {
   const [open, setOpen] = useState(false);
   const [detail, setDetail] = useState<RequestItem | undefined>();
   const [form] = Form.useForm();
+
+  function showNotification(text: string) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  div.style.position = 'fixed';
+  div.style.bottom = '20px';
+  div.style.right = '20px';
+  div.style.background = '#52c41a';
+  div.style.color = 'white';
+  div.style.padding = '10px 16px';
+  div.style.borderRadius = '8px';
+  div.style.fontFamily = 'sans-serif';
+  div.style.zIndex = '9999';
+  document.body.appendChild(div);
+  setTimeout(() => div.remove(), 2500);
+}
 
   const reload = useCallback(async () => {
     setLoading(true);
@@ -59,7 +75,9 @@ export default function App() {
       dateFin: endISO,
       motivation: values.motivation || undefined,
     });
-    message.success("Demande créée");
+    //alert('Demande créée avec succès.'); //option pas jolie et non reactive
+    //message.success("Demande créée"); //option non compatible de antd
+    showNotification('Demande créée avec succès'); //option de remplacement
     setOpen(false);
     form.resetFields();
     reload();
