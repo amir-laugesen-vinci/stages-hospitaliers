@@ -1,0 +1,125 @@
+openapi: 3.0.3
+info:
+  title: API Stages
+  version: 1.0.0
+servers:
+  - url: /api
+
+paths:
+  /requests:
+    get:
+      summary: Lister les demandes (avec filtres)
+      parameters:
+        - in: query
+          name: statut
+          schema:
+            $ref: '#/components/schemas/Statut'
+          description: Filtre par statut
+        - in: query
+          name: service
+          schema:
+            type: string
+          description: Filtre partiel sur le service (contains)
+      responses:
+        '200':
+          description: Liste des demandes
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Request' }
+    post:
+      summary: Créer une demande
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/RequestCreate' }
+      responses:
+        '201':
+          description: Demande créée
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Request' }
+        '400':
+          description: Erreur de validation
+
+  /requests/{id}:
+    get:
+      summary: Détail d'une demande
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Détail
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Request' }
+        '404':
+          description: Non trouvé
+
+  /requests/{id}/status:
+    patch:
+      summary: Mettre à jour le statut
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/StatusPatch' }
+      responses:
+        '200':
+          description: Demande mise à jour
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Request' }
+        '400':
+          description: Erreur de validation
+        '404':
+          description: Non trouvé
+
+components:
+  schemas:
+    Statut:
+      type: string
+      enum: [EN_ATTENTE, APPROUVEE, REFUSEE]
+
+    Request:
+      type: object
+      required: [id, nom, prenom, email, service, dateDebut, dateFin, statut, createdAt]
+      properties:
+        id: { type: integer }
+        nom: { type: string }
+        prenom: { type: string }
+        email: { type: string, format: email }
+        service: { type: string, example: "Cardiologie" }
+        dateDebut: { type: string, format: date }
+        dateFin: { type: string, format: date }
+        statut: { $ref: '#/components/schemas/Statut' }
+        motivation: { type: string, nullable: true }
+        createdAt: { type: string, format: date-time }
+
+    RequestCreate:
+      type: object
+      required: [nom, prenom, email, service, dateDebut, dateFin]
+      properties:
+        nom: { type: string }
+        prenom: { type: string }
+        email: { type: string, format: email }
+        service: { type: string }
+        dateDebut: { type: string, format: date }
+        dateFin: { type: string, format: date }
+        motivation: { type: string, nullable: true }
+
+    StatusPatch:
+      type: object
+      required: [statut]
+      properties:
+        statut: { $ref: '#/components/schemas/Statut' }
