@@ -1,15 +1,15 @@
 import { Router } from 'express';
 import { prisma } from './prisma.js';
-import type { Prisma } from '@prisma/client';
+import type { Prisma, Statut } from '@prisma/client';
 import { RequestCreateSchema, StatusSchema } from './validators.js';
 
 const router = Router();
 
 router.get('/requests', async (req, res) => {
-  const { statut, service } = req.query as { statut?: string; service?: string };
+  const { statut, service } = req.query as { statut?: string; service?: string }; //typage pour eviter any et ? car filtre peut etre undefined
 
   const where: Prisma.RequestWhereInput = {
-    ...(statut ? { statut: statut as any } : {}),
+    ...(statut ? { statut: statut as Statut} : {}), //rajoute le statut du typage de prisma pour eviter any
     ...(service ? { service: { contains: String(service) } } : {}),
   };
 

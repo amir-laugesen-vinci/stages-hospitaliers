@@ -4,11 +4,13 @@ Backend :
 
 Node.js + TypeScript
 
+Zod
+
 Express
 
-Prisma (ORM)
+Prisma
 
-SQLite (base embarquée pour le test, persistante via Docker volume)
+SQLite
 
 OpenAPI / Swagger (/api/docs)
 
@@ -18,11 +20,11 @@ React + TypeScript
 
 Vite
 
-Ant Design (UI)
+Ant Design
 
 Containerisation :
 
-Docker + docker-compose
+Docker
 
 ⚙️ Installation locale
 1. Cloner le projet
