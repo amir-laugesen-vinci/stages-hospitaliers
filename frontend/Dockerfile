@@ -8,7 +8,6 @@ COPY tsconfig*.json ./
 COPY vite.config.ts ./
 COPY index.html ./
 COPY src ./src
-COPY public ./public
 
 # Injecte la base API au build (utilisée par src/api.ts)
 ARG VITE_API_URL=/api
