@@ -24,6 +24,7 @@ WORKDIR /app
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/prisma ./prisma
+COPY openapi.yaml ./openapi.yaml
 
 ENV NODE_ENV=production
 ENV PORT=4000

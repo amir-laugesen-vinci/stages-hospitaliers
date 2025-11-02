@@ -1,3 +1,4 @@
+import path from "node:path";
 import express from "express";
 import cors from "cors";
 import router from "./routes.js";
@@ -8,13 +9,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Charge la spec YAML
-const openapiSpec = YAML.load("./openapi.yaml");
+// Charge la spec YAML depuis le cwd (/app en Docker)
+const openapiPath = path.resolve(process.cwd(), "openapi.yaml");
+const openapiSpec = YAML.load(openapiPath);
 
-// Branche mes routes et la doc
+// Routes + docs
 app.use("/api", router);
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(openapiSpec));
+app.get("/api/openapi.json", (_req, res) => res.json(openapiSpec));
 
-// Lance mon serveur
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => console.log(`API on http://localhost:${PORT}/api`));
